@@ -14,5 +14,7 @@ CREATE TABLE transacao (
     data_transacao DATETIME NOT NULL,
     categoria_id INT NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
-        ON DELETE BLOCK
+        ON DELETE RESTRICT
 );
+
+INSERT INTO categoria(nome) VALUES ("Alimentação"), ("Transporte"), ("Lazer");
