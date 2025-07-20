@@ -6,13 +6,15 @@ import br.edu.ifsp.arqdsw2.myfinanceapi.model.util.TipoTransacao;
 
 public class Transacao {
 	private int id;
+	private double valor;
 	private String description;
 	private TipoTransacao tipo;
 	private Timestamp data;
 	private int idCategoria;
 
-	public Transacao(int id, String description, TipoTransacao tipo, Timestamp data, int idCategoria) {
+	public Transacao(int id, double valor, String description, TipoTransacao tipo, Timestamp data, int idCategoria) {
 		this.id = id;
+		this.valor = valor;
 		this.description = description;
 		this.tipo = tipo;
 		this.data = data;
@@ -55,6 +57,14 @@ public class Transacao {
 
 	public int getIdCategoria() {
 		return idCategoria;
+	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
 
 	public void setIdCategoria(int idCategoria) {

@@ -9,6 +9,7 @@ CREATE TABLE categoria (
 
 CREATE TABLE transacao (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    valor DOUBLE NOT NULL,
     descricao VARCHAR(150) NOT NULL,
     tipo ENUM('RECEITA', 'DESPESA') NOT NULL,
     data_transacao DATETIME NOT NULL,
