@@ -27,10 +27,10 @@ public class TransacaoDao {
 	}
 
 	public void insert(Transacao transacao) throws SQLException {
-		String sql = "INSERT INTO categoria (valor,descricao,tipo,data_transacao,categoria_id) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO transacao (valor,descricao,tipo,data_transacao,categoria_id) VALUES (?,?,?,?,?)";
 		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setDouble(1, transacao.getValor());
-			stmt.setString(2, transacao.getDescription());
+			stmt.setString(2, transacao.getDescricao());
 			stmt.setString(3, transacao.getTipo().toString());
 			stmt.setDate(4, Date.valueOf(transacao.getData().toLocalDateTime().toLocalDate()));
 			stmt.setInt(5, transacao.getIdCategoria());
@@ -39,11 +39,11 @@ public class TransacaoDao {
 	}
 
 	public boolean update(Transacao transacao) throws SQLException {
-		String sql = "UPDATE categoria SET valor=?, descricao=?, tipo=?, data_transacao=?, categoria_id=? WHERE id=?";
+		String sql = "UPDATE transacao SET valor=?, descricao=?, tipo=?, data_transacao=?, categoria_id=? WHERE id=?";
 		int rows = 0;
 		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setDouble(1, transacao.getValor());
-			stmt.setString(2, transacao.getDescription());
+			stmt.setString(2, transacao.getDescricao());
 			stmt.setString(3, transacao.getTipo().name());
 			stmt.setDate(4, Date.valueOf(transacao.getData().toLocalDateTime().toLocalDate()));
 			stmt.setInt(5, transacao.getIdCategoria());
@@ -107,7 +107,7 @@ public class TransacaoDao {
 				Transacao t = new Transacao();
 				t.setId(rs.getInt("id"));
 				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescription(rs.getString("descricao"));
+				t.setDescricao(rs.getString("descricao"));
 				t.setIdCategoria(rs.getInt("categoria_id"));
 				t.setValor(rs.getDouble("valor"));
 				if (rs.getString("valor") == "RECEITA") {
@@ -159,7 +159,7 @@ public class TransacaoDao {
 				Transacao t = new Transacao();
 				t.setId(rs.getInt("id"));
 				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescription(rs.getString("descricao"));
+				t.setDescricao(rs.getString("descricao"));
 				t.setIdCategoria(rs.getInt("categoria_id"));
 				t.setValor(rs.getDouble("valor"));
 				t.setTipo(TipoTransacao.RECEITA);
@@ -207,7 +207,7 @@ public class TransacaoDao {
 				Transacao t = new Transacao();
 				t.setId(rs.getInt("id"));
 				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescription(rs.getString("descricao"));
+				t.setDescricao(rs.getString("descricao"));
 				t.setIdCategoria(rs.getInt("categoria_id"));
 				t.setValor(rs.getDouble("valor"));
 				t.setTipo(TipoTransacao.DESPESA);
@@ -227,7 +227,7 @@ public class TransacaoDao {
 				t = new Transacao();
 				t.setId(rs.getInt("id"));
 				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescription(rs.getString("descricao"));
+				t.setDescricao(rs.getString("descricao"));
 				t.setIdCategoria(rs.getInt("categoria_id"));
 				t.setValor(rs.getDouble("valor"));
 				if (rs.getString("valor") == "RECEITA") {
