@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/transacao/*","/categoria/*","/resumo/*"})
+@WebServlet("/finance/*")
 public class FrontController extends HttpServlet {
 	private Handler chain;
 

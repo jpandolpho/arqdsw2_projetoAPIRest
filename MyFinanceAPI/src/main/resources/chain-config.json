@@ -1,0 +1,5 @@
+{
+	"chain":[
+		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.PostCategoriaHandler"
+	]
+}
