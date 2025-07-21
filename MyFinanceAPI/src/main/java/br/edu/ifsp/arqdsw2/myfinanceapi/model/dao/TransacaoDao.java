@@ -81,10 +81,10 @@ public class TransacaoDao {
 				sql += " categoria_id = ?";
 			}
 		}
+		sql += " ORDER BY data_transacao DESC";
 		if (limit > 0 && page > 0) {
 			sql += " LIMIT ? OFFSET ?";
 		}
-		sql += " ORDER BY data_transacao DESC";
 		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 			int param = 1;
 			if (month > -1 && year > -1) {
@@ -100,7 +100,7 @@ public class TransacaoDao {
 			if (limit > 0 && page > 0) {
 				stmt.setInt(param, limit);
 				param++;
-				stmt.setInt(param, page);
+				stmt.setInt(param, (page-1)*limit);
 			}
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -253,13 +253,13 @@ public class TransacaoDao {
 		return sum;
 	}
 	
-	public Map<String,Double> fetchSumByCategoria() throws SQLException{
-		Map<String,Double> result = new HashMap<>();
-		String sql = "SELECT categoria, SUM(valor) AS total FROM transacao WHERE tipo='DESPESA' GROUP BY categoria";
+	public Map<Integer,Double> fetchSumByCategoria() throws SQLException{
+		Map<Integer,Double> result = new HashMap<>();
+		String sql = "SELECT categoria_id, SUM(valor) AS total FROM transacao WHERE tipo='DESPESA' GROUP BY categoria_id";
 		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
-				result.put(rs.getString("categoria"), rs.getDouble("total"));
+				result.put(rs.getInt("categoria_id"), rs.getDouble("total"));
 			}
 		}
 		return result;
