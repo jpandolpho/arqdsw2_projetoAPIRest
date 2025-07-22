@@ -110,7 +110,7 @@ public class TransacaoDao {
 				t.setDescricao(rs.getString("descricao"));
 				t.setIdCategoria(rs.getInt("categoria_id"));
 				t.setValor(rs.getDouble("valor"));
-				if (rs.getString("valor") == "RECEITA") {
+				if (rs.getString("tipo").equals("RECEITA")) {
 					t.setTipo(TipoTransacao.RECEITA);
 				} else {
 					t.setTipo(TipoTransacao.DESPESA);
