@@ -1,10 +1,14 @@
-let categories = new Map()
 let selects = ["#filtroCategoria","#formCategoria"]
 
 function initialLoad(categories, url) {
     loadCategories(categories[0])
     loadCategories(categories[1])
     loadData(url)
+}
+
+function clearForm(){
+    document.querySelector("#transactionForm").reset()
+
 }
 
 async function loadCategories(target) {
@@ -18,13 +22,13 @@ async function loadCategories(target) {
         })
         .then(data =>{
             let select = document.querySelector(target)
-            categories = new Map()
+            select.innerHTML = ""
+            select.appendChild(document.createElement("option"))
             for(d in data){
                 let option = document.createElement("option")
                 option.value= data[d].id
                 option.innerHTML = data[d].nome
                 select.appendChild(option)
-                categories.set(data[d].id,data[d].name)
             }
         })
         .catch(error =>{
@@ -74,9 +78,19 @@ async function loadData(url) {
                     })
                 date.innerHTML = new Intl.DateTimeFormat("br-BR").format(Date.parse(data[d].data))
                 valor.innerHTML = new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data[d].valor))
-                verMais.appendChild(document.createElement("button"))
-                editar.appendChild(document.createElement("button"))
-                excluir.appendChild(document.createElement("button"))
+                
+                let infoBtn = document.createElement("button")
+                infoBtn.classList = ["btn btn-primary"]
+                infoBtn.textContent= "Info"
+                verMais.appendChild(infoBtn)
+                let editBtn = document.createElement("button")
+                editBtn.classList = ["btn btn-primary"]
+                editBtn.textContent= "Edit"
+                editar.appendChild(editBtn)
+                let delBtn = document.createElement("button")
+                delBtn.classList = ["btn btn-danger"]
+                delBtn.textContent= "Del"
+                excluir.appendChild(delBtn)
                 
                 tr.appendChild(descricao)
                 tr.appendChild(tipo)
@@ -112,6 +126,30 @@ newCategoria.addEventListener("click", ()=>{
                 for(s in selects){
                     loadCategories(selects[s])
                 }
+            }
+        })
+})
+
+let newTransaction = document.querySelector("#buttonSave")
+newTransaction.addEventListener("click", ()=>{
+    let dataTransacao = new Date(document.querySelector("#formData").value).toJSON()
+    let json = {
+        "valor": document.querySelector("#formValue").value,
+        "descricao": document.querySelector("#formDescription").value,
+        "tipo": document.querySelector("#formTipo").value,
+        "idCategoria":document.querySelector("#formCategoria").value,
+        "data": dataTransacao
+    }
+    fetch("http://localhost:8080/MyFinanceAPI/finance/transacao", {
+         method:"POST",
+        body: JSON.stringify(json),
+        headers:{ "Content-type": "application/json; charset=UTF-8"}
+    })
+        .then(response =>{
+            if(response.status=201){
+                document.querySelector("#tbody").innerHTML=""
+                clearForm()
+                loadData("http://localhost:8080/MyFinanceAPI/finance/transacao")
             }
         })
 })

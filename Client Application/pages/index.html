@@ -13,9 +13,7 @@
         <div class="container">
             <form id="filtros">
                 <label for="filtroCategoria">Categoria:</label>
-                <select name="categoria" id="filtroCategoria">
-                    <option value=""></option>
-                </select>
+                <select name="categoria" id="filtroCategoria"></select>
                 <label for="filtroTipo">Tipo:</label>
                 <select name="tipo" id="filtroTipo">
                     <option value=""></option>
@@ -59,7 +57,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="">
+                <form action="" id="#transactionForm">
                     <label for="formValue">Valor: R$</label>
                     <input type="number" name="valor" id="formValue" step="0.01">
                     <br>
@@ -83,7 +81,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" id="buttonSave">Salvar</button>
+                <button type="button" class="btn btn-primary" id="buttonSave" data-bs-dismiss="modal">Salvar</button>
             </div>
             </div>
         </div>
@@ -103,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" id="buttonCategory">Salvar</button>
+                <button type="button" class="btn btn-primary" id="buttonCategory" data-bs-dismiss="modal">Salvar</button>
             </div>
             </div>
         </div>
