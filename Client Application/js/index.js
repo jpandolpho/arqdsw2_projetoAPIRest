@@ -1,4 +1,5 @@
 let selects = ["#filtroCategoria","#formCategoria"]
+const BASE_URL = "http://localhost:8080/MyFinanceAPI/finance"
 
 function initialLoad(categories, url) {
     loadCategories(categories[0])
@@ -6,13 +7,20 @@ function initialLoad(categories, url) {
     loadData(url)
 }
 
-function clearForm(){
-    document.querySelector("#transactionForm").reset()
-
+function clearForm(target){
+    let form = document.querySelector(target)
+    let inputs = form.getElementsByTagName("input")
+    for(i in inputs){
+        inputs[i].value=""
+    }
+    let textarea = form.getElementsByTagName("textarea")
+    if(textarea!=null){
+        textarea.value = ""
+    }
 }
 
 async function loadCategories(target) {
-    fetch("http://localhost:8080/MyFinanceAPI/finance/categoria")
+    fetch(`${BASE_URL}/categoria`)
         .then(response =>{
             if(response.ok){
                 return response.json()
@@ -68,7 +76,7 @@ async function loadData(url) {
                     tr.className = "table-danger"
                 }
                 let idCat = data[d].idCategoria
-                fetch(`http://localhost:8080/MyFinanceAPI/finance/categoria/${idCat}`)
+                fetch(`${BASE_URL}/categoria/${idCat}`)
                     .then(response =>{
                         if(response.ok)
                             return response.json()
@@ -106,8 +114,37 @@ async function loadData(url) {
         })
 }
 
+async function loadResumo(){
+    fetch(`${BASE_URL}/resumo`)
+        .then(response =>{
+            if(response.ok)
+                return response.json()
+            else
+                return {"erro":"Não existem transações."}
+        })
+        .then(data =>{
+            if(data.erro != null){
+                let div = document.querySelector("#bodyModalResumo")
+                div.innerHTML = ""
+                let h3 = document.createElement("h3")
+                h3.textContent = data.erro
+                div.appendChild(h3)
+            }else{
+                let receitas = document.querySelector("#resumoReceita")
+                let despesas = document.querySelector("#resumoDespesa")
+                let saldo = document.querySelector("#resumoConta")
+                receitas.textContent = data.receitas
+                despesas.textContent = data.despesas
+                saldo.textContent = data.saldo
+
+                let table = document.querySelector("#tbodyResumo")
+                let categorias = data.despesasPorCategoria
+            }
+        })
+}
+
 document.addEventListener("DOMContentLoaded", ()=>{
-    initialLoad(selects,"http://localhost:8080/MyFinanceAPI/finance/transacao")
+    initialLoad(selects,`${BASE_URL}/transacao`)
 })
 
 let newCategoria = document.querySelector("#buttonCategory")
@@ -116,7 +153,7 @@ newCategoria.addEventListener("click", ()=>{
     let json = {
         "nome": nome
     }
-    fetch("http://localhost:8080/MyFinanceAPI/finance/categoria", {
+    fetch(`${BASE_URL}/categoria`, {
         method:"POST",
         body: JSON.stringify(json),
         headers:{ "Content-type": "application/json; charset=UTF-8"}
@@ -140,7 +177,7 @@ newTransaction.addEventListener("click", ()=>{
         "idCategoria":document.querySelector("#formCategoria").value,
         "data": dataTransacao
     }
-    fetch("http://localhost:8080/MyFinanceAPI/finance/transacao", {
+    fetch(`${BASE_URL}/transacao`, {
          method:"POST",
         body: JSON.stringify(json),
         headers:{ "Content-type": "application/json; charset=UTF-8"}
@@ -148,8 +185,16 @@ newTransaction.addEventListener("click", ()=>{
         .then(response =>{
             if(response.status=201){
                 document.querySelector("#tbody").innerHTML=""
-                clearForm()
-                loadData("http://localhost:8080/MyFinanceAPI/finance/transacao")
+                loadData(`${BASE_URL}transacao`)
             }
         })
+})
+
+let modalTransaction = document.querySelector("#transactionModal")
+modalTransaction.addEventListener('show.bs.modal', ()=>{
+    clearForm("#transactionModal")
+})
+let modalCategory = document.querySelector("#categoryModal")
+modalCategory.addEventListener('show.bs.modal',()=>{
+    clearForm("#categoryModal")
 })

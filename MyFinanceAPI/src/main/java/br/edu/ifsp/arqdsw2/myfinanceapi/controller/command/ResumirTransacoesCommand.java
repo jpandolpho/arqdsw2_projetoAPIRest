@@ -31,7 +31,7 @@ public class ResumirTransacoesCommand implements Command {
 			out.print(new Gson().toJson(json));
 			out.flush();
 		}else {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Falha na criação do resumo");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Não existem transações cadastradas.");
 		}
 	}
 

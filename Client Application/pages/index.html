@@ -24,7 +24,8 @@
                 <input type="month" id="filtroMonth">
                 <button type="button" class="btn btn-primary">Filtrar</button>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#transactionModal">Nova Transação</button>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#categoryModal">Nova Categoria</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#categoryModal" >Nova Categoria</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resumoModal" >Resumo</button>
             </form>
         </div>
         <br>
@@ -57,7 +58,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" id="#transactionForm">
+                <form action="" id="transactionForm">
                     <label for="formValue">Valor: R$</label>
                     <input type="number" name="valor" id="formValue" step="0.01">
                     <br>
@@ -94,10 +95,40 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="categoryForm">
                     <label for="formName">Nome:</label>
                     <input type="text" name="categoryName" id="formName">
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="buttonCategory" data-bs-dismiss="modal">Salvar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="resumoModal" aria-labelledby="resumoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Resumo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bodyModalResumo">
+                <div class="text-center">
+                    <h6 id="resumoReceita">Receitas: </h6>
+                    <h6 id="resumoDespesa">Despesas: </h6>
+                    <h6 id="resumoConta">Saldo: </h6>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider" id="tbodyResumo"></tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
