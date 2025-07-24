@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.dao.TransacaoDao;
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.entity.Transacao;
-import br.edu.ifsp.arqdsw2.myfinanceapi.model.util.TipoTransacao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
