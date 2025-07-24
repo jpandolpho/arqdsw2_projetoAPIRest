@@ -60,6 +60,7 @@ function filterTable(){
         if(flag)
             url+="&"
         url+=`type=${tipo}`
+        flag=true
     }
     countPages(`${BASE_URL}/contagem${url}`)
     if(flag)
