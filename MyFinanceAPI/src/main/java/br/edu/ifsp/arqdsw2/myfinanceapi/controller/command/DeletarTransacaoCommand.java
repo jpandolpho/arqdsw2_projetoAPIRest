@@ -1,11 +1,6 @@
 package br.edu.ifsp.arqdsw2.myfinanceapi.controller.command;
 
-import java.io.PrintWriter;
-
-import com.google.gson.Gson;
-
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.dao.TransacaoDao;
-import br.edu.ifsp.arqdsw2.myfinanceapi.model.entity.Transacao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
