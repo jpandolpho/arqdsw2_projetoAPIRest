@@ -24,7 +24,6 @@
                 <input type="month" id="filtroMonth">
                 <label for="filtroQtd">Transações por página:</label>
                 <select name="tipo" id="filtroQtd">
-                    <option value="2">2</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="40">40</option>
@@ -141,6 +140,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" id="buttonCategory" data-bs-dismiss="modal">Salvar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="informationModal" aria-labelledby="informationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Transação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="infoValor"></h6>
+                <h6 id="infoDescrição"></h6>
+                <h6 id="infoTipo"></h6>
+                <h6 id="infoCategoria"></h6>
+                <h6 id="infoData"></h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
             </div>
         </div>

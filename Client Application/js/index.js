@@ -68,6 +68,32 @@ function filterTable(){
     loadData(`${BASE_URL}/transacao${url}`)
 }
 
+async function setupView(id) {
+    fetch(`${BASE_URL}/transacao/${id}`)
+        .then(response =>{
+            if(response.ok){
+                return response.json()
+            }else{
+                throw new Error(response.statusText)
+            }
+        })
+        .then(data =>{
+            document.querySelector("#infoValor").textContent = `Valor: ${new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data.valor))}`
+            document.querySelector("#infoDescrição").textContent = `Descrição: ${data.descricao}`
+            document.querySelector("#infoTipo").textContent = `Tipo: ${data.tipo}`
+            let idCat = data.idCategoria
+            fetch(`${BASE_URL}/categoria/${idCat}`)
+                .then(response =>{
+                    if(response.ok)
+                        return response.json()
+                })
+                .then(data =>{
+                    document.querySelector("#infoCategoria").textContent = `Categoria: ${data.nome}`
+                })
+            document.querySelector("#infoData").textContent = `Data: ${new Intl.DateTimeFormat("br-BR").format(Date.parse(data.data))}`
+        })
+}
+
 async function loadCategories(target) {
     fetch(`${BASE_URL}/categoria`)
         .then(response =>{
@@ -137,15 +163,26 @@ async function loadData(url) {
                 valor.innerHTML = new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data[d].valor))
                 
                 let infoBtn = document.createElement("button")
-                infoBtn.classList = ["btn btn-primary"]
+                infoBtn.classList.add("btn", "btn-primary")
                 infoBtn.textContent= "Info"
+                infoBtn.setAttribute("data-bs-toggle", "modal")
+                infoBtn.setAttribute("data-bs-target", "#informationModal")
+                let id = data[d].id
+                infoBtn.addEventListener('click', ()=>{
+                    setupView(id)
+                })
                 verMais.appendChild(infoBtn)
+                
                 let editBtn = document.createElement("button")
-                editBtn.classList = ["btn btn-primary"]
+                editBtn.classList.add("btn", "btn-primary")
                 editBtn.textContent= "Edit"
+                editBtn.setAttribute("data-bs-toggle", "modal")
+                editBtn.setAttribute("data-bs-target", "#transactionModal")
+                editBtn.setAttribute("data-bs-id", id)
                 editar.appendChild(editBtn)
+                
                 let delBtn = document.createElement("button")
-                delBtn.classList = ["btn btn-danger"]
+                delBtn.classList.add("btn", "btn-danger")
                 delBtn.textContent= "Del"
                 excluir.appendChild(delBtn)
                 
@@ -276,8 +313,13 @@ newTransaction.addEventListener("click", ()=>{
 })
 
 let modalTransaction = document.querySelector("#transactionModal")
-modalTransaction.addEventListener('show.bs.modal', ()=>{
+modalTransaction.addEventListener('show.bs.modal', event=>{
     clearForm("#transactionModal")
+    let button = event.relatedTarget;
+    let id = button.getAttribute('data-bs-id')
+    if(id!=null){
+        console.log("não é null")
+    }
 })
 
 let modalCategory = document.querySelector("#categoryModal")
