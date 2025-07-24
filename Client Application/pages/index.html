@@ -66,6 +66,7 @@
             </div>
             <div class="modal-body">
                 <form action="" id="transactionForm">
+                    <input type="hidden" id="formId">
                     <label for="formValue">Valor: R$</label>
                     <input type="number" name="valor" id="formValue" step="0.01">
                     <br>
@@ -90,6 +91,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" id="buttonSave" data-bs-dismiss="modal">Salvar</button>
+                <button type="button" class="btn btn-primary" id="buttonEdit" data-bs-dismiss="modal" style="display:none">Salvar</button>
             </div>
             </div>
         </div>

@@ -94,6 +94,27 @@ async function setupView(id) {
         })
 }
 
+async function setupEdit(id) {
+    newTransaction.style.display = "none"
+    editTransaction.style.display = "block"
+    fetch(`${BASE_URL}/transacao/${id}`)
+        .then(response =>{
+            if(response.ok){
+                return response.json()
+            }else{
+                throw new Error(response.statusText)
+            }
+        })
+        .then(data =>{
+            document.querySelector("#formId").value = data.id
+            document.querySelector("#formValue").value = data.valor
+            document.querySelector("#formDescription").value = data.descricao
+            document.querySelector("#formTipo").value = data.tipo
+            document.querySelector("#formCategoria").value = data.idCategoria
+            document.querySelector("#formData").value = (new Date(data.data)).toISOString().substring(0,16)
+        })
+}
+
 async function loadCategories(target) {
     fetch(`${BASE_URL}/categoria`)
         .then(response =>{
@@ -314,11 +335,16 @@ newTransaction.addEventListener("click", ()=>{
 
 let modalTransaction = document.querySelector("#transactionModal")
 modalTransaction.addEventListener('show.bs.modal', event=>{
+    let title = document.querySelector("#transactionTitle")
+    newTransaction.style.display = "block"
+    editTransaction.style.display = "none"
+    title.textContent = "Nova Transação"
     clearForm("#transactionModal")
     let button = event.relatedTarget;
     let id = button.getAttribute('data-bs-id')
     if(id!=null){
-        console.log("não é null")
+        title.textContent = "Editar Transação"
+        setupEdit(id)
     }
 })
 
@@ -353,4 +379,28 @@ buttonNext.addEventListener('click', ()=>{
     document.querySelector("#tbody").innerHTML=""
     filterTable()
     checkPages()
+})
+
+let editTransaction = document.querySelector("#buttonEdit")
+editTransaction.addEventListener('click', ()=>{
+    let dataTransacao = new Date(document.querySelector("#formData").value).toJSON()
+    let json = {
+        "valor": document.querySelector("#formValue").value,
+        "descricao": document.querySelector("#formDescription").value,
+        "tipo": document.querySelector("#formTipo").value,
+        "idCategoria":document.querySelector("#formCategoria").value,
+        "data": dataTransacao,
+        "id": document.querySelector("#formId").value
+    }
+    fetch(`${BASE_URL}/transacao`, {
+        method:"PUT",
+        body: JSON.stringify(json),
+        headers:{ "Content-type": "application/json; charset=UTF-8"}
+    })
+        .then(response =>{
+            if(response.status=201){
+                document.querySelector("#tbody").innerHTML=""
+                filterTable()
+            }
+        })
 })
