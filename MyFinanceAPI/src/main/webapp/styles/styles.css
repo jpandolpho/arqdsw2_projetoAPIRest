@@ -1,0 +1,14 @@
+span{
+  font-family: 'Courier New', Courier, monospace;
+  color: #10b601;
+}
+
+.code{
+  font-family: 'Courier New', Courier, monospace;
+  color: #10b601;
+}
+
+.tab {
+  display: inline-block;
+  margin-left: 4em;
+}

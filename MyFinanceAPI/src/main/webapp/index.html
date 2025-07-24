@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/styles.css">
+  <title>MyFinanceAPI - Documentação</title>
+</head>
+<body>
+  <h1>DOCUMENTAÇÃO - MyFinanceApi</h1>
+  <hr>
+  <div>
+    <h2>1. <span>GET /transacao</span> - Listar todas as transações</h2>
+    <p><b>Descrição:</b> Retorna lista com transações.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /transacao</span></p>
+    <p><b>Parâmetros:</b></p>
+    <ul>
+      <li><span>page</span>: Busca por uma página. Usado em conjunto com <span>limit</span> para escolher quais transações serão trazidas do banco. Opcional.</li>
+      <li><span>limit</span>: Limita a quantidade de transações a ser recuparada. Usado em conjunto com <span>page</span> para escolher quais transações serão trazidas do banco. Opcional.</li>
+      <li><span>month</span>: Delimita o mês da transação. Usado em conjunto com <span>year</span> para escolher quais transações serão trazidas do banco. Opcional.</li>
+      <li><span>year</span>: Delimita o mês da transação. Usado em conjunto com <span>month</span> para escolher quais transações serão trazidas do banco. Opcional.</li>
+      <li><span>categoria</span>: Delimita a categoria da transação. Opcional.</li>
+      <li><span>type</span>: Delimita o tipo(receita ou despesa) da transação. Opcional.</li>
+    </ul>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, transações retornadas.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>2. <span>GET /transacao/{id}</span> - Busca transação com o {id} especificado</h2>
+    <p><b>Descrição:</b> Retorna uma transação.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /transacao/{id}</span></p>
+    <p><b>Parâmetros:</b> Não possui parâmetros.</p>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, transações retornadas.</li>
+      <li><span>400 BAD REQUEST</span> - ID inválido para a transação.</li>
+      <li><span>404 NOT FOUND</span> - ID válido, mas não encontrado.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>3. <span>GET /resumo</span> - Resumo das transações</h2>
+    <p><b>Descrição:</b> Retorna um resumo das transações, mostrando total de despesas, total de gastos, total de gastos por categoria e saldo.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /resumo</span></p>
+    <p><b>Parâmetros:</b> Não possui parâmetros.</p>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, transações retornadas.</li>
+      <li><span>404 NOT FOUND</span> - Não existem transações salvas no banco.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>4. <span>GET /categoria</span> - Listar todas as categorias</h2>
+    <p><b>Descrição:</b> Retorna lista com todas as categorias.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /categoria</span></p>
+    <p><b>Parâmetros:</b> Não possui parâmetros.</p>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, categorias retornadas.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>5. <span>GET /categoria/{id}</span> - Busca categoria com o {id} especificado</h2>
+    <p><b>Descrição:</b> Retorna uma categoria.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /categoria/{id}</span></p>
+    <p><b>Parâmetros:</b> Não possui parâmetros.</p>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, categoria retornada.</li>
+      <li><span>400 BAD REQUEST</span> - ID inválido para a categoria.</li>
+      <li><span>404 NOT FOUND</span> - ID válido, mas não encontrado.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>6. <span>GET /contagem</span> - Contagem de número de transações.</h2>
+    <p><b>Descrição:</b> Retorna número de transações.</p>
+    <p><b>Método HTTP:</b><span> GET</span></p>
+    <p><b>Endpoint:</b><span> /contagem</span></p>
+    <p><b>Parâmetros:</b></p>
+    <ul>
+      <li><span>month</span>: Delimita o mês da transação. Usado em conjunto com <span>year</span> para escolher quais transações serão contadas. Opcional.</li>
+      <li><span>year</span>: Delimita o mês da transação. Usado em conjunto com <span>month</span> para escolher quais transações serão contadas. Opcional.</li>
+      <li><span>categoria</span>: Delimita a categoria da transação. Opcional.</li>
+      <li><span>type</span>: Delimita o tipo(receita ou despesa) da transação. Opcional.</li>
+    </ul>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Requisição bem-sucedida, contagem retornada.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>7. <span>POST /transacao</span> - Salvar transação</h2>
+    <p><b>Descrição:</b> Salva uma nova transação no banco.</p>
+    <p><b>Método HTTP:</b><span> POST</span></p>
+    <p><b>Endpoint:</b><span> /transacao</span></p>
+    <p><b>Corpo da Requisição(JSON):</b></p>
+    <div class="code">
+      <p>{</p>
+      <p><span class="tab"></span>"valor": 10,00,</p>
+      <p><span class="tab"></span>"descricao": "Coca-cola 2L",</p>
+      <p><span class="tab"></span>"idCategoria": 1,</p>
+      <p><span class="tab"></span>"tipo": "DESPESA",</p>
+      <p><span class="tab"></span>"data": "2025-07-23"</p>
+      <p>}</p>
+    </div>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>201 CREATED</span> - Transação criada com sucesso.</li>
+      <li><span>400 BAD REQUEST</span> - Dados insuficientes ou inválidos.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>8. <span>POST /categoria</span> - Salvar categoria</h2>
+    <p><b>Descrição:</b> Salva uma nova categoria no banco.</p>
+    <p><b>Método HTTP:</b><span> POST</span></p>
+    <p><b>Endpoint:</b><span> /categoria</span></p>
+    <p><b>Corpo da Requisição(JSON):</b></p>
+    <div class="code">
+      <p>{</p>
+      <p><span class="tab"></span>"nome": "Vestuário"</p>
+      <p>}</p>
+    </div>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>201 CREATED</span> - Categoria criada com sucesso.</li>
+      <li><span>400 BAD REQUEST</span> - Dados insuficientes ou inválidos.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>  
+  <div>
+    <h2>9. <span>PUT /transacao</span> - Editar transacao</h2>
+    <p><b>Descrição:</b> Edita uma transação já existente.</p>
+    <p><b>Método HTTP:</b><span> PUT</span></p>
+    <p><b>Endpoint:</b><span> /transacao</span></p>
+    <p><b>Corpo da Requisição(JSON):</b></p>
+    <div class="code">
+      <p>{</p>
+      <p><span class="tab"></span>"valor": 10,00,</p>
+      <p><span class="tab"></span>"descricao": "Coca-cola 2.5L",</p>
+      <p><span class="tab"></span>"idCategoria": 1,</p>
+      <p><span class="tab"></span>"tipo": "DESPESA",</p>
+      <p><span class="tab"></span>"data": "2025-07-23",</p>
+      <p><span class="tab"></span>"id": 2</p>
+      <p>}</p>
+    </div>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>200 OK</span> - Transação atualizada com sucesso.</li>
+      <li><span>404 NOT FOUND</span> - Transação não encontrada no banco.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+  <div>
+    <h2>10. <span>DELETE /transacao/{id}</span> - Deleta transação com o {id} especificado</h2>
+    <p><b>Descrição:</b> Retorna lista com transações.</p>
+    <p><b>Método HTTP:</b><span> DELETE</span></p>
+    <p><b>Endpoint:</b><span> /transacao/{id}</span></p>
+    <p><b>Parâmetros:</b> Não possui parâmetros.</p>
+    <p><b>Códigos de Resposta:</b></p>
+    <ul>
+      <li><span>204 OK</span> - Requisição bem-sucedida, transação apagada.</li>
+      <li><span>400 BAD REQUEST</span> - ID inválido para a transação.</li>
+      <li><span>404 NOT FOUND</span> - ID válido, mas não encontrado.</li>
+      <li><span>500 INTERNAL SERVER ERROR</span> - Erro ao buscar os dados.</li>
+    </ul>
+  </div>
+  <br>
+</body>
+</html>
