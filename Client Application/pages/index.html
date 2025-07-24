@@ -22,10 +22,10 @@
                 </select>
                 <label for="filtroMonth">Data:</label>
                 <input type="month" id="filtroMonth">
-                <button type="button" class="btn btn-primary">Filtrar</button>
+                <button type="button" class="btn btn-primary" id="buttonFilter">Filtrar</button>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#transactionModal">Nova Transação</button>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#categoryModal" >Nova Categoria</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resumoModal" >Resumo</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#categoryModal">Nova Categoria</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resumoModal">Resumo</button>
             </form>
         </div>
         <br>
@@ -116,9 +116,9 @@
             </div>
             <div class="modal-body" id="bodyModalResumo">
                 <div class="text-center">
-                    <h6 id="resumoReceita">Receitas: </h6>
-                    <h6 id="resumoDespesa">Despesas: </h6>
-                    <h6 id="resumoConta">Saldo: </h6>
+                    <h6 id="resumoReceita"></h6>
+                    <h6 id="resumoDespesa"></h6>
+                    <h6 id="resumoConta"></h6>
                 </div>
                 <table class="table table-bordered">
                     <thead>

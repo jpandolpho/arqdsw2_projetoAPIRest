@@ -19,6 +19,31 @@ function clearForm(target){
     }
 }
 
+function filterTable(){
+    let categoria = document.querySelector("#filtroCategoria").value
+    let tipo = document.querySelector("#filtroTipo").value
+    let mesAno = document.querySelector("#filtroMonth").value.split("-")
+    let ano = mesAno[0]
+    let mes = mesAno[1]
+    let url = `${BASE_URL}/transacao`
+    let flag = false
+    if(tipo=="RECEITA")
+        url+="/receitas"
+    if(tipo=="DESPESA")
+        url+="/despesas"
+    url+="?"
+    if(categoria!=''){
+        url+=`categoria=${categoria}`
+        flag = true
+    }
+    if(mesAno.length > 1){
+        if(flag)
+            url+="&"
+        url+=`month=${mes}&year=${ano}`
+    }
+    loadData(url)
+}
+
 async function loadCategories(target) {
     fetch(`${BASE_URL}/categoria`)
         .then(response =>{
@@ -115,6 +140,14 @@ async function loadData(url) {
 }
 
 async function loadResumo(){
+    let receitas = document.querySelector("#resumoReceita")
+    let despesas = document.querySelector("#resumoDespesa")
+    let saldo = document.querySelector("#resumoConta")
+    receitas.textContent = "Receitas: "
+    despesas.textContent = "Despesas: "
+    saldo.textContent = "Saldo: "
+    let table = document.querySelector("#tbodyResumo")
+    table.innerHTML=""
     fetch(`${BASE_URL}/resumo`)
         .then(response =>{
             if(response.ok)
@@ -130,15 +163,28 @@ async function loadResumo(){
                 h3.textContent = data.erro
                 div.appendChild(h3)
             }else{
-                let receitas = document.querySelector("#resumoReceita")
-                let despesas = document.querySelector("#resumoDespesa")
-                let saldo = document.querySelector("#resumoConta")
-                receitas.textContent = data.receitas
-                despesas.textContent = data.despesas
-                saldo.textContent = data.saldo
+                receitas.textContent += new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data.receitas))
+                despesas.textContent += new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data.despesas))
+                saldo.textContent += new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(data.saldo))
 
-                let table = document.querySelector("#tbodyResumo")
                 let categorias = data.despesasPorCategoria
+                for([key, value] of Object.entries(categorias)){
+                    let tr = document.createElement("tr")
+                    let categoria = document.createElement("td")
+                    let valor = document.createElement("td")
+                    fetch(`${BASE_URL}/categoria/${key}`)
+                        .then(response =>{
+                            if(response.ok)
+                                return response.json()
+                        })
+                        .then(data =>{
+                            categoria.innerHTML = data.nome
+                        })
+                    valor.innerHTML = new Intl.NumberFormat("br-BR",{style:"currency", currency:"BRL"}).format(parseFloat(value))
+                    tr.appendChild(categoria)
+                    tr.appendChild(valor)
+                    table.appendChild(tr)
+                }
             }
         })
 }
@@ -194,7 +240,19 @@ let modalTransaction = document.querySelector("#transactionModal")
 modalTransaction.addEventListener('show.bs.modal', ()=>{
     clearForm("#transactionModal")
 })
+
 let modalCategory = document.querySelector("#categoryModal")
 modalCategory.addEventListener('show.bs.modal',()=>{
     clearForm("#categoryModal")
+})
+
+let summary = document.querySelector("#resumoModal")
+summary.addEventListener('show.bs.modal', ()=>{
+    loadResumo()
+})
+
+let buttonFilter = document.querySelector("#buttonFilter")
+buttonFilter.addEventListener('click', ()=>{
+    document.querySelector("#tbody").innerHTML=""
+    filterTable()
 })
