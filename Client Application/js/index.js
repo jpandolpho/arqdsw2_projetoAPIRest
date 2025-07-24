@@ -140,6 +140,24 @@ async function loadCategories(target) {
         })
 }
 
+async function excluirTransacao(id) {
+    if(confirm("Deseja excluir esta transação?")){
+        fetch(`${BASE_URL}/transacao/${id}`,{
+            method: "DELETE"
+        })
+            .then(response =>{
+                if(response.status=204){
+                    alert("Transação excluída!")
+                    document.querySelector("#tbody").innerHTML=""
+                    filterTable()
+                }else{
+                    throw new Error(response.statusText)
+                }
+            })
+    }
+
+}
+
 async function loadData(url) {
     fetch(url)
         .then(response =>{
@@ -205,6 +223,9 @@ async function loadData(url) {
                 let delBtn = document.createElement("button")
                 delBtn.classList.add("btn", "btn-danger")
                 delBtn.textContent= "Del"
+                delBtn.addEventListener('click',()=>{
+                    excluirTransacao(id)
+                })
                 excluir.appendChild(delBtn)
                 
                 tr.appendChild(descricao)
@@ -321,7 +342,7 @@ newTransaction.addEventListener("click", ()=>{
         "data": dataTransacao
     }
     fetch(`${BASE_URL}/transacao`, {
-         method:"POST",
+        method:"POST",
         body: JSON.stringify(json),
         headers:{ "Content-type": "application/json; charset=UTF-8"}
     })
