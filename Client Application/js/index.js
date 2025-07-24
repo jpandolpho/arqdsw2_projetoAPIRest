@@ -1,10 +1,28 @@
-let selects = ["#filtroCategoria","#formCategoria"]
 const BASE_URL = "http://localhost:8080/MyFinanceAPI/finance"
 
-function initialLoad(categories, url) {
+let selects = ["#filtroCategoria","#formCategoria"]
+let paginaAtual = 1
+let totalPaginas
+
+function initialLoad(categories) {
     loadCategories(categories[0])
     loadCategories(categories[1])
-    loadData(url)
+    filterTable()
+}
+
+function checkPages(){
+    let btnPrev = document.querySelector("#btnPrevious")
+    if(paginaAtual==1){
+        btnPrev.disabled = true
+    }else{
+        btnPrev.disabled = false
+    }
+    let btnNext = document.querySelector("#btnNext")
+    if(paginaAtual==totalPaginas){
+        btnNext.disabled = true
+    }else{
+        btnNext.disabled = false
+    }
 }
 
 function clearForm(target){
@@ -23,15 +41,11 @@ function filterTable(){
     let categoria = document.querySelector("#filtroCategoria").value
     let tipo = document.querySelector("#filtroTipo").value
     let mesAno = document.querySelector("#filtroMonth").value.split("-")
+    limite = document.querySelector("#filtroQtd").value
     let ano = mesAno[0]
     let mes = mesAno[1]
-    let url = `${BASE_URL}/transacao`
+    let url = "?"
     let flag = false
-    if(tipo=="RECEITA")
-        url+="/receitas"
-    if(tipo=="DESPESA")
-        url+="/despesas"
-    url+="?"
     if(categoria!=''){
         url+=`categoria=${categoria}`
         flag = true
@@ -40,8 +54,18 @@ function filterTable(){
         if(flag)
             url+="&"
         url+=`month=${mes}&year=${ano}`
+        flag = true
     }
-    loadData(url)
+    if(tipo!=""){
+        if(flag)
+            url+="&"
+        url+=`type=${tipo}`
+    }
+    countPages(`${BASE_URL}/contagem${url}`)
+    if(flag)
+        url+='&'
+    url+=`page=${paginaAtual}&limit=${limite}`
+    loadData(`${BASE_URL}/transacao${url}`)
 }
 
 async function loadCategories(target) {
@@ -189,8 +213,23 @@ async function loadResumo(){
         })
 }
 
+async function countPages(url) {
+    await fetch(url)
+        .then(response =>{
+            if(response.ok){
+                return response.json()
+            }else{
+                throw new Error("Erro na requisição")
+            }
+        })
+        .then(data =>{
+            totalPaginas = Math.ceil(data.transacoes/limite)
+        })
+    checkPages()
+}
+
 document.addEventListener("DOMContentLoaded", ()=>{
-    initialLoad(selects,`${BASE_URL}/transacao`)
+    initialLoad(selects)
 })
 
 let newCategoria = document.querySelector("#buttonCategory")
@@ -231,7 +270,7 @@ newTransaction.addEventListener("click", ()=>{
         .then(response =>{
             if(response.status=201){
                 document.querySelector("#tbody").innerHTML=""
-                loadData(`${BASE_URL}transacao`)
+                filterTable()
             }
         })
 })
@@ -253,6 +292,23 @@ summary.addEventListener('show.bs.modal', ()=>{
 
 let buttonFilter = document.querySelector("#buttonFilter")
 buttonFilter.addEventListener('click', ()=>{
+    paginaAtual = 1
     document.querySelector("#tbody").innerHTML=""
     filterTable()
+})
+
+let buttonPrevious = document.querySelector("#btnPrevious")
+buttonPrevious.addEventListener('click', ()=>{
+    paginaAtual--
+    document.querySelector("#tbody").innerHTML=""
+    filterTable()
+    checkPages()
+})
+
+let buttonNext = document.querySelector("#btnNext")
+buttonNext.addEventListener('click', ()=>{
+    paginaAtual++
+    document.querySelector("#tbody").innerHTML=""
+    filterTable()
+    checkPages()
 })

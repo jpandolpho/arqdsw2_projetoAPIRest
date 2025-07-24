@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.dao.TransacaoDao;
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.entity.Transacao;
+import br.edu.ifsp.arqdsw2.myfinanceapi.model.util.TipoTransacao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,6 +21,7 @@ public class ListarTransacaoCommand implements Command {
 		String mes = request.getParameter("month");
 		String ano = request.getParameter("year");
 		String categoria = request.getParameter("categoria");
+		String tipo = request.getParameter("type");
 		int page = 0;
 		int limit = 0;
 		int month = -1;
@@ -40,7 +42,7 @@ public class ListarTransacaoCommand implements Command {
 		if(categoria!=null && categoria.matches("^\\d+$")) {
 			category = Integer.parseInt(categoria);
 		}
-		List<Transacao> transacoes = dao.fetch(page,limit,month,year,category);
+		List<Transacao> transacoes = dao.fetch(page,limit,month,year,category, tipo);
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		out.print(new Gson().toJson(transacoes));

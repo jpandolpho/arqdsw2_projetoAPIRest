@@ -1,20 +1,20 @@
 package br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler;
 
-import br.edu.ifsp.arqdsw2.myfinanceapi.controller.command.ListarReceitasCommand;
+import br.edu.ifsp.arqdsw2.myfinanceapi.controller.command.ContarTransacoesCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class GetReceitasHandler extends AbstractHandler {
+public class GetContarTransacaoHandler extends AbstractHandler {
 
 	@Override
 	protected boolean canHandle(HttpServletRequest request) {
 		return request.getMethod().equals("GET")
-				&& (request.getPathInfo()!=null && request.getPathInfo().equals("/transacao/receitas"));
+				&& (request.getPathInfo()!=null && request.getPathInfo().equals("/contagem"));
 	}
 
 	@Override
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		new ListarReceitasCommand().executar(request, response);
+		new ContarTransacoesCommand().executar(request, response);
 	}
 
 }

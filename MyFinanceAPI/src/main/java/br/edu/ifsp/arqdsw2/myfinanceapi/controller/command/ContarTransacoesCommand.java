@@ -1,16 +1,15 @@
 package br.edu.ifsp.arqdsw2.myfinanceapi.controller.command;
 
 import java.io.PrintWriter;
-import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import br.edu.ifsp.arqdsw2.myfinanceapi.model.dao.TransacaoDao;
-import br.edu.ifsp.arqdsw2.myfinanceapi.model.entity.Transacao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class ListarDespesasCommand implements Command {
+public class ContarTransacoesCommand implements Command {
 
 	@Override
 	public void executar(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -20,6 +19,7 @@ public class ListarDespesasCommand implements Command {
 		String mes = request.getParameter("month");
 		String ano = request.getParameter("year");
 		String categoria = request.getParameter("categoria");
+		String tipo = request.getParameter("type");
 		int page = 0;
 		int limit = 0;
 		int month = -1;
@@ -40,10 +40,11 @@ public class ListarDespesasCommand implements Command {
 		if(categoria!=null && categoria.matches("^\\d+$")) {
 			category = Integer.parseInt(categoria);
 		}
-		List<Transacao> transacoes = dao.fetchDespesa(page,limit,month,year,category);
-		response.setContentType("application/json");
+		int result = dao.countTransacoes(page,limit,month,year,category, tipo);
+		JsonObject json = new JsonObject();
+		json.addProperty("transacoes", result);
 		PrintWriter out = response.getWriter();
-		out.print(new Gson().toJson(transacoes));
+		out.print(new Gson().toJson(json));
 		out.flush();
 	}
 

@@ -1,12 +1,11 @@
 {
 	"chain":[
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetTransacoesHandler",
-		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetDespesasHandler",
-		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetReceitasHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetTransacaoPorIdHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetResumoHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetCategoriasHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetCategoriaPorIdHandler",
+		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.GetContarTransacaoHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.PostCategoriaHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.PostTransacaoHandler",
 		"br.edu.ifsp.arqdsw2.myfinanceapi.controller.handler.PutTransacaoHandler",

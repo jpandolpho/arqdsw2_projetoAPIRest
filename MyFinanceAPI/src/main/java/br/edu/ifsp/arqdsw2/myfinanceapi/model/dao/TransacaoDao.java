@@ -64,22 +64,31 @@ public class TransacaoDao {
 		return rows > 0;
 	}
 
-	public List<Transacao> fetch(int page, int limit, int month, int year, int categoria) throws SQLException {
+	public List<Transacao> fetch(int page, int limit, int month, int year, int categoria, String tipo) throws SQLException {
 		List<Transacao> transacoes = new ArrayList<>();
 		String sql = "SELECT * FROM transacao";
+		boolean flag = false;
 		if (month > -1 || year > -1 || categoria > -1) {
 			sql += " WHERE";
-			boolean setDate = false;
 			if (month > -1 && year > -1) {
-				setDate = true;
+				flag = true;
 				sql += " MONTH(data_transacao) = ? AND YEAR(data_transacao) = ?";
 			}
 			if (categoria > -1) {
-				if (setDate) {
+				if (flag) {
 					sql += " AND";
 				}
 				sql += " categoria_id = ?";
+				flag = true;
 			}
+		}
+		if(tipo!=null) {
+			if (flag) {
+				sql += " AND";
+			}else {
+				sql += " WHERE";
+			}
+			sql+= " tipo = ?";
 		}
 		sql += " ORDER BY data_transacao DESC";
 		if (limit > 0 && page > 0) {
@@ -95,6 +104,10 @@ public class TransacaoDao {
 			}
 			if (categoria > -1) {
 				stmt.setInt(param, categoria);
+				param++;
+			}
+			if(tipo!=null) {
+				stmt.setString(param, tipo);
 				param++;
 			}
 			if (limit > 0 && page > 0) {
@@ -115,102 +128,6 @@ public class TransacaoDao {
 				} else {
 					t.setTipo(TipoTransacao.DESPESA);
 				}
-				transacoes.add(t);
-			}
-		}
-		return transacoes;
-	}
-
-	public List<Transacao> fetchReceita(int page, int limit, int month, int year, int categoria) throws SQLException {
-		List<Transacao> transacoes = new ArrayList<>();
-		String sql = "SELECT * FROM transacao WHERE tipo='RECEITA'";
-		if (month > -1 || year > -1 || categoria > -1) {
-			if (month > -1 && year > -1) {
-				sql += " AND MONTH(data_transacao) = ? AND YEAR(data_transacao) = ?";
-			}
-			if (categoria > -1) {
-				sql += " AND categoria_id = ?";
-			}
-		}
-		if (limit > 0 && page > 0) {
-			sql += " LIMIT ? OFFSET ?";
-		}
-		sql += " ORDER BY data_transacao DESC";
-
-		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-			int param = 1;
-			if (month > -1 && year > -1) {
-				stmt.setInt(param, month);
-				param++;
-				stmt.setInt(param, year);
-				param++;
-			}
-			if (categoria > -1) {
-				stmt.setInt(param, categoria);
-				param++;
-			}
-			if (limit > 0 && page > 0) {
-				stmt.setInt(param, limit);
-				param++;
-				stmt.setInt(param, page);
-			}
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				Transacao t = new Transacao();
-				t.setId(rs.getInt("id"));
-				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescricao(rs.getString("descricao"));
-				t.setIdCategoria(rs.getInt("categoria_id"));
-				t.setValor(rs.getDouble("valor"));
-				t.setTipo(TipoTransacao.RECEITA);
-				transacoes.add(t);
-			}
-		}
-		return transacoes;
-	}
-
-	public List<Transacao> fetchDespesa(int page, int limit, int month, int year, int categoria) throws SQLException {
-		List<Transacao> transacoes = new ArrayList<>();
-		String sql = "SELECT * FROM transacao WHERE tipo='DESPESA'";
-		if (month > -1 || year > -1 || categoria > -1) {
-			if (month > -1 && year > -1) {
-				sql += " AND MONTH(data_transacao) = ? AND YEAR(data_transacao) = ?";
-			}
-			if (categoria > -1) {
-				sql += " AND categoria_id = ?";
-			}
-		}
-		if (limit > 0 && page > 0) {
-			sql += " LIMIT ? OFFSET ?";
-		}
-		sql += " ORDER BY data_transacao DESC";
-
-		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-			int param = 1;
-			if (month > -1 && year > -1) {
-				stmt.setInt(param, month);
-				param++;
-				stmt.setInt(param, year);
-				param++;
-			}
-			if (categoria > -1) {
-				stmt.setInt(param, categoria);
-				param++;
-			}
-			if (limit > 0 && page > 0) {
-				stmt.setInt(param, limit);
-				param++;
-				stmt.setInt(param, page);
-			}
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				Transacao t = new Transacao();
-				t.setId(rs.getInt("id"));
-				t.setData(Timestamp.valueOf(rs.getDate("data_transacao").toLocalDate().atStartOfDay()));
-				t.setDescricao(rs.getString("descricao"));
-				t.setIdCategoria(rs.getInt("categoria_id"));
-				t.setValor(rs.getDouble("valor"));
-				t.setTipo(TipoTransacao.DESPESA);
 				transacoes.add(t);
 			}
 		}
@@ -260,6 +177,65 @@ public class TransacaoDao {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				result.put(rs.getInt("categoria_id"), rs.getDouble("total"));
+			}
+		}
+		return result;
+	}
+	
+	public int countTransacoes(int page, int limit, int month, int year, int categoria, String tipo) throws SQLException{
+		int result = -1;
+		String sql = "SELECT COUNT(*) AS result FROM transacao";
+		boolean flag = false;
+		if (month > -1 || year > -1 || categoria > -1) {
+			sql += " WHERE";
+			if (month > -1 && year > -1) {
+				flag = true;
+				sql += " MONTH(data_transacao) = ? AND YEAR(data_transacao) = ?";
+			}
+			if (categoria > -1) {
+				if (flag) {
+					sql += " AND";
+				}
+				sql += " categoria_id = ?";
+				flag = true;
+			}
+		}
+		if(tipo!=null) {
+			if (flag) {
+				sql += " AND";
+			}else {
+				sql += " WHERE";
+			}
+			sql+= " tipo = ?";
+		}
+		sql += " ORDER BY data_transacao DESC";
+		if (limit > 0 && page > 0) {
+			sql += " LIMIT ? OFFSET ?";
+		}
+		try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+			int param = 1;
+			if (month > -1 && year > -1) {
+				stmt.setInt(param, month);
+				param++;
+				stmt.setInt(param, year);
+				param++;
+			}
+			if (categoria > -1) {
+				stmt.setInt(param, categoria);
+				param++;
+			}
+			if(tipo!=null) {
+				stmt.setString(param, tipo);
+				param++;
+			}
+			if (limit > 0 && page > 0) {
+				stmt.setInt(param, limit);
+				param++;
+				stmt.setInt(param, (page-1)*limit);
+			}
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt("result");
 			}
 		}
 		return result;
